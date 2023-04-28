@@ -1,5 +1,6 @@
 import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-ethers";
+import { Signer, providers } from "ethers";
 
 task(
     "hello",
@@ -11,8 +12,15 @@ task(
 
 task("mint", "minting new tokenId")
     .addParam("contract", "nftContractAddr")
+    .addParam("to", "address who get NFTs") 
     .setAction(async(args, hre) =>{
         const contractAddress = await hre.ethers.getContractAt("contract", args.contract);
-        const abi = await ("./");
+        const abi = require("../artifacts/contracts/Nft.sol/Nft.json");
+        //const signer = new hre.ethers.Wallet()
+
+        const contract = new hre.ethers.Contract(args.contract, abi)
+
+        const tx = await contract.mintNFT();
+        await tx.wait();
 
     });
